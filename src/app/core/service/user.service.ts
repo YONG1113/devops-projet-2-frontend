@@ -12,4 +12,10 @@ export class UserService {
   register(user: Register): Observable<Object> {
     return this.httpClient.post('/api/register', user);
   }
+
+  login(login: string, password: string): Observable<string> {
+    return this.httpClient.post('/api/login', { login, password }, {
+      responseType: 'text'
+    });
+  }
 }
