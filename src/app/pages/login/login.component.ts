@@ -4,6 +4,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MaterialModule } from '../../shared/material.module';
 import { UserService } from '../../core/service/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -16,6 +17,7 @@ export class LoginComponent implements OnInit {
   private formBuilder = inject(FormBuilder);
   private userService = inject(UserService);
   private destroyRef = inject(DestroyRef);
+  private router = inject(Router);
 
   loginForm: FormGroup = new FormGroup({});
   submitted = false;
@@ -48,6 +50,7 @@ export class LoginComponent implements OnInit {
         next: token => {
           localStorage.setItem('token', token);
           alert('Login successful!');
+          this.router.navigate(['/students']);
         },
         error: () => {
           this.errorMessage = 'Invalid login or password';

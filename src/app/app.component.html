@@ -1,1 +1,16 @@
-<router-outlet/>
+<nav class="navbar navbar-light bg-light px-3">
+
+  <div class="ml-auto">
+    @if (isLoggedIn()) {
+      <a class="btn btn-link" routerLink="/students">Students</a>
+      <button type="button" class="btn btn-outline-danger" (click)="logout()">
+        Logout
+      </button>
+    } @else {
+      <a class="btn btn-link" routerLink="/login">Login</a>
+      <a class="btn btn-outline-primary" routerLink="/register">Register</a>
+    }
+  </div>
+</nav>
+
+<router-outlet />

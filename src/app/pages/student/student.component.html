@@ -1,0 +1,112 @@
+<div class="card m-3">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h5 class="mb-0">Students</h5>
+    <button type="button" class="btn btn-primary" (click)="startCreate()">
+      Add student
+    </button>
+  </div>
+
+  <div class="card-body">
+    @if (errorMessage) {
+      <div class="alert alert-danger" role="alert">{{ errorMessage }}</div>
+    }
+
+    @if (loading) {
+      <p>Loading...</p>
+    } @else if (students.length === 0) {
+      <p>No students found.</p>
+    } @else {
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th>Student number</th>
+              <th>First name</th>
+              <th>Last name</th>
+              <th>Email</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (student of students; track student.id) {
+              <tr>
+                <td>{{ student.studentNumber }}</td>
+                <td>{{ student.firstName }}</td>
+                <td>{{ student.lastName }}</td>
+                <td>{{ student.email }}</td>
+                <td>
+                  <button type="button" class="btn btn-info btn-sm mr-1"
+                    (click)="selectStudent(student)">View</button>
+                  <button type="button" class="btn btn-danger btn-sm"
+                    (click)="deleteStudent(student)">Delete</button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+</div>
+
+@if (mode) {
+  <div class="card m-3">
+    <h5 class="card-header">{{ mode === 'create' ? 'Add student' : 'Edit student' }}</h5>
+    <div class="card-body">
+      <form [formGroup]="studentForm" (ngSubmit)="save()">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="firstName">First name</label>
+            <input id="firstName" type="text" formControlName="firstName"
+              class="form-control"
+              [ngClass]="{ 'is-invalid': submitted && form['firstName'].errors }" />
+            @if (submitted && form['firstName'].errors?.['required']) {
+              <div class="invalid-feedback">First name is required</div>
+            }
+          </div>
+
+          <div class="form-group col-md-6">
+            <label for="lastName">Last name</label>
+            <input id="lastName" type="text" formControlName="lastName"
+              class="form-control"
+              [ngClass]="{ 'is-invalid': submitted && form['lastName'].errors }" />
+            @if (submitted && form['lastName'].errors?.['required']) {
+              <div class="invalid-feedback">Last name is required</div>
+            }
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input id="email" type="email" formControlName="email"
+            class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && form['email'].errors }" />
+          @if (submitted && form['email'].errors?.['required']) {
+            <div class="invalid-feedback">Email is required</div>
+          } @else if (submitted && form['email'].errors?.['email']) {
+            <div class="invalid-feedback">Enter a valid email</div>
+          }
+        </div>
+
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary mr-1">Save</button>
+          <button type="button" class="btn btn-secondary" (click)="cancelForm()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+} @else if (selectedStudent) {
+  <div class="card m-3">
+    <h5 class="card-header">Student details</h5>
+    <div class="card-body">
+      <p><strong>Student number:</strong> {{ selectedStudent.studentNumber }}</p>
+      <p><strong>First name:</strong> {{ selectedStudent.firstName }}</p>
+      <p><strong>Last name:</strong> {{ selectedStudent.lastName }}</p>
+      <p><strong>Email:</strong> {{ selectedStudent.email }}</p>
+
+      <button type="button" class="btn btn-primary mr-1" (click)="startEdit()">Edit</button>
+      <button type="button" class="btn btn-danger"
+        (click)="deleteStudent(selectedStudent)">Delete</button>
+    </div>
+  </div>
+}

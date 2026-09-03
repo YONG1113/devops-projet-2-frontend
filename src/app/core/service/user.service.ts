@@ -18,4 +18,8 @@ export class UserService {
       responseType: 'text'
     });
   }
+
+  logout(): void {
+    localStorage.removeItem('token');
+  }
 }
